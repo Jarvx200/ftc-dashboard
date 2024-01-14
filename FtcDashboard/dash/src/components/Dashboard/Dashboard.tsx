@@ -9,7 +9,9 @@ import { BaseViewIconButton } from '@/components/views/BaseView';
 import { ReactComponent as ConnectedIcon } from '@/assets/icons/connected.svg';
 import { ReactComponent as DisconnectedIcon } from '@/assets/icons/disconnected.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/icons/settings.svg';
-import SettingsModal from './SettingsModal';
+import { ReactComponent as GamepadIcon } from '@/assets/icons/gamepad.svg';
+import SettingsModal from '@/components/Modals/SettingsModal';
+import ControllerSettingsModal from '@/components/Modals/ControllerSettingsModal';
 import { startSocketWatcher } from '@/store/middleware/socketMiddleware';
 
 export default function Dashboard() {
@@ -24,6 +26,8 @@ export default function Dashboard() {
   const dispatch = useDispatch();
 
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isControllerSettingsModalOpen, setIsControllerSettingsModalOpen] =
+    useState(false);
 
   useEffect(() => {
     dispatch(getLayoutPreset());
@@ -81,6 +85,14 @@ export default function Dashboard() {
           >
             <SettingsIcon className="h-7 w-7 transition group-hover:rotate-[15deg] group-focus:rotate-[15deg]" />
           </BaseViewIconButton>
+
+          <BaseViewIconButton
+            title="Controller Settings"
+            className="icon-btn group ml-3 h-8 w-8 hover:border-white/50"
+            onClick={() => setIsControllerSettingsModalOpen(true)}
+          >
+            <GamepadIcon className="h-7 w-7 transition group-hover:rotate-[15deg] group-focus:rotate-[15deg]" />
+          </BaseViewIconButton>
         </div>
       </header>
       {socket.isConnected && !enabled ? (
@@ -109,6 +121,11 @@ export default function Dashboard() {
       <SettingsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
+      />
+
+      <ControllerSettingsModal
+        isOpen={isControllerSettingsModalOpen}
+        onClose={() => setIsControllerSettingsModalOpen(false)}
       />
       {/* Insert a headless-ui portal so the .set-theme-x styles apply to the headless ui dialogs. */}
       {/* They are rendered as siblings to the root by default, outside of our scope */}
